@@ -3,7 +3,7 @@ import pandas as pd
 
 # Page Config
 st.set_page_config(
-    page_title="SAC Style Table",
+    page_title="SAC Table Layout",
     layout="wide"
 )
 
@@ -11,10 +11,17 @@ st.set_page_config(
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Title
-st.title("New_Analytic_Model")
+# Header
+st.markdown(
+    """
+    <div class="top-header">
+        New_Analytic_Model_3
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# Upload File
+# Upload
 uploaded_file = st.file_uploader(
     "Upload CSV or Excel File",
     type=["csv", "xlsx"]
@@ -22,16 +29,16 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
 
-    # Read File
+    # Read file
     if uploaded_file.name.endswith(".csv"):
         df = pd.read_csv(uploaded_file)
 
     else:
         df = pd.read_excel(uploaded_file)
 
-    # Auto Detect
-    measures = []
+    # Detect dimensions & measures
     dimensions = []
+    measures = []
 
     for col in df.columns:
 
@@ -44,39 +51,63 @@ if uploaded_file is not None:
         else:
             dimensions.append(col)
 
-    # SAC Layout Header
-    st.markdown(
-        f"""
-        <div class="measure-header">
-            <div class="left-space"></div>
-            <div class="measure-title">
-                Measures
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    # Arrange order
+    ordered_cols = dimensions + measures
 
-    # Arrange Columns
-    ordered_columns = dimensions + measures
+    # Create HTML Table
+    html = """
+    <div class="table-wrapper">
 
-    # Display Table
-    st.dataframe(
-        df[ordered_columns],
-        use_container_width=True,
-        height=500
-    )
+    <table>
 
-    # Bottom Info
-    col1, col2 = st.columns(2)
+    <thead>
+    """
 
-    with col1:
-        st.subheader("Dimensions")
-        st.write(dimensions)
+    # First Header Row
+    html += "<tr>"
 
-    with col2:
-        st.subheader("Measures")
-        st.write(measures)
+    # Empty headers for dimensions
+    for d in dimensions:
+        html += '<th class="blank-head"></th>'
+
+    # Measures group header
+    html += f'''
+        <th class="measure-group" colspan="{len(measures)}">
+            Measures
+        </th>
+    '''
+
+    html += "</tr>"
+
+    # Column Names Row
+    html += "<tr>"
+
+    for col in ordered_cols:
+
+        if col in measures:
+            html += f'<th class="measure-col">{col}</th>'
+
+        else:
+            html += f'<th class="dimension-col">{col}</th>'
+
+    html += "</tr></thead>"
+
+    # Body
+    html += "<tbody>"
+
+    for _, row in df.iterrows():
+
+        html += "<tr>"
+
+        for col in ordered_cols:
+            html += f"<td>{row[col]}</td>"
+
+        html += "</tr>"
+
+    html += "</tbody></table></div>"
+
+    # Render
+    st.markdown(html, unsafe_allow_html=True)
 
 else:
     st.info("Upload CSV or Excel File")
