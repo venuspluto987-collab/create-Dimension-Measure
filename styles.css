@@ -1,0 +1,61 @@
+/* Main App Background */
+.stApp {
+    background-color: #f5f7fb;
+    font-family: Arial, sans-serif;
+}
+
+/* Title */
+h1 {
+    color: #1f4e79;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Upload Box */
+[data-testid="stFileUploader"] {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px dashed #1f77b4;
+}
+
+/* Measures Card */
+.measure-card {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+/* Dimensions Card */
+.dimension-card {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    color: #1565c0;
+    font-weight: bold;
+}
+
+/* Section Headers */
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Table Styling */
+table {
+    background-color: white;
+    border-radius: 10px;
+}
+
+/* Chart Container */
+.chart-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+}
